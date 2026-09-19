@@ -1,0 +1,24 @@
+{
+  "name": "club-madeira-awin-connector",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Club Madeira Awin publisher 2889699 — read client, selection criteria, dry-run join queue",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "cli": "tsx src/cli.ts",
+    "list_join_candidates": "tsx src/cli.ts list_join_candidates",
+    "relationship_status": "tsx src/cli.ts relationship_status"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.9"
+  }
+}
