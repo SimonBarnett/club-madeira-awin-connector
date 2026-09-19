@@ -1,12 +1,12 @@
 import {
   API_BASE,
   PROGRAMMES_CACHE_MS,
-  PUBLISHER_ID,
   type EnvLike,
   type Relationship,
   readAccessToken,
 } from '../config';
-import { processLimiter, RateLimiter } from './rateLimit';
+import { createPublisherContext } from '../publisher';
+import { RateLimiter } from './rateLimit';
 import { redactedError } from './redact';
 import type { Programme, ProgrammeDetails, Publisher } from './types';
 
@@ -35,7 +35,7 @@ export class AwinClient {
   private readonly fetchImpl: FetchLike;
   private readonly limiter: RateLimiter;
   private readonly base: string;
-  private readonly publisherId: number;
+  readonly publisherId: number;
   private readonly now: () => number;
   private readonly cacheMs: number;
   private readonly cache = new Map<string, CacheEntry>();
@@ -44,9 +44,12 @@ export class AwinClient {
     this.env = opts.env ?? process.env;
     this.tokenOverride = opts.token;
     this.fetchImpl = opts.fetch ?? fetch;
-    this.limiter = opts.limiter ?? processLimiter;
     this.base = (opts.base ?? API_BASE).replace(/\/$/, '');
-    this.publisherId = opts.publisherId ?? PUBLISHER_ID;
+    this.publisherId = createPublisherContext({
+      publisherId: opts.publisherId,
+      env: this.env,
+    }).publisherId;
+    this.limiter = opts.limiter ?? new RateLimiter();
     this.now = opts.now ?? Date.now;
     this.cacheMs = opts.cacheMs ?? PROGRAMMES_CACHE_MS;
   }
@@ -56,7 +59,7 @@ export class AwinClient {
   }
 
   async getProgrammes(relationship: Relationship = 'joined'): Promise<Programme[]> {
-    const key = `programmes:${relationship}`;
+    const key = `programmes:${this.publisherId}:${relationship}`;
     const cached = this.readCache<Programme[]>(key);
     if (cached) return cached;
     const data = await this.request<unknown>(

@@ -68,4 +68,24 @@ export class RateLimiter {
   }
 }
 
+/**
+ * Process-global limiter. Not the production default — AwinClient uses a
+ * per-client or per-token limiter. Kept for explicit opt-in / tests only.
+ */
 export const processLimiter = new RateLimiter();
+
+const limitersByToken = new Map<string, RateLimiter>();
+
+/** One sliding window per access token (or explicit key). Not process-global. */
+export function limiterForToken(token: string, opts?: RateLimiterOptions): RateLimiter {
+  const key = token.length > 0 ? token : 'missing-token';
+  const hit = limitersByToken.get(key);
+  if (hit) return hit;
+  const created = new RateLimiter(opts);
+  limitersByToken.set(key, created);
+  return created;
+}
+
+export function resetTokenLimiters(): void {
+  limitersByToken.clear();
+}

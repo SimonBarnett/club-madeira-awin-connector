@@ -2,7 +2,7 @@
   "name": "club-madeira-awin-connector",
   "version": "0.1.0",
   "private": true,
-  "description": "Club Madeira Awin publisher 2889699 — read client, selection criteria, dry-run join queue",
+  "description": "Awin publisher connector — read client, selection criteria, dry-run join queue. Publisher id is injected.",
   "type": "module",
   "engines": {
     "node": ">=20"

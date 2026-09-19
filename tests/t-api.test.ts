@@ -2,10 +2,11 @@ import { describe, expect, it } from 'vitest';
 import { AwinClient, type FetchLike } from '../src/awin/client';
 import { readApprovalPercentage } from '../src/awin/types';
 import { RateLimiter } from '../src/awin/rateLimit';
-import { API_BASE, PUBLISHER_ID, REDACTED } from '../src';
+import { API_BASE, REDACTED } from '../src';
 import { redact } from '../src/awin/redact';
 
 const TOKEN = 'test-token-fixture';
+const PUBLISHER_ID = 1111111;
 
 function limiter(): RateLimiter {
   return new RateLimiter({ maxCalls: 100, windowMs: 60_000, now: () => 0, sleep: async () => {} });
@@ -30,6 +31,7 @@ describe('T-API', () => {
     };
     const client = new AwinClient({
       token: TOKEN,
+      publisherId: PUBLISHER_ID,
       fetch: fetchImpl,
       limiter: limiter(),
       env: {},
@@ -55,6 +57,7 @@ describe('T-API', () => {
     };
     const client = new AwinClient({
       token: TOKEN,
+      publisherId: PUBLISHER_ID,
       fetch: fetchImpl,
       limiter: limiter(),
       env: {},
@@ -67,7 +70,13 @@ describe('T-API', () => {
     const fetchImpl: FetchLike = async () => {
       throw new Error('fetch must not run');
     };
-    const client = new AwinClient({ token: '', fetch: fetchImpl, limiter: limiter(), env: {} });
+    const client = new AwinClient({
+      token: '',
+      publisherId: PUBLISHER_ID,
+      fetch: fetchImpl,
+      limiter: limiter(),
+      env: {},
+    });
     await expect(client.getPublisher()).rejects.toThrow(/Missing AWIN_ACCESS_TOKEN/);
     try {
       await client.getPublisher();
@@ -88,6 +97,7 @@ describe('T-API', () => {
     };
     const client = new AwinClient({
       token: TOKEN,
+      publisherId: PUBLISHER_ID,
       fetch: fetchImpl,
       limiter: limiter(),
       env: {},
@@ -106,6 +116,7 @@ describe('T-API', () => {
     };
     const client = new AwinClient({
       token: TOKEN,
+      publisherId: PUBLISHER_ID,
       fetch: fetchImpl,
       limiter: limiter(),
       env: {},

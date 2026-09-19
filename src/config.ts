@@ -1,9 +1,4 @@
-/** Locked publisher id. Do not re-litigate. */
-export const PUBLISHER_ID = 2889699;
-
 export const API_BASE = 'https://api.awin.com';
-
-export const PROMOTION_URL = 'https://www.clubmadeira.uk/for-awin-advertisers';
 
 export const TOKEN_UI_URL = 'https://ui.awin.com/awin-api';
 
@@ -75,6 +70,13 @@ export function readAccessToken(env: EnvLike = process.env): string | undefined 
 /** U1 — unset until operator fills the live modal option. Do not guess. */
 export function readPromotionType(env: EnvLike = process.env): string | undefined {
   const t = env.AWIN_PROMOTION_TYPE;
+  if (!t) return undefined;
+  return t;
+}
+
+/** Optional per-tenant promotion URL. Never defaulted to a named advertiser. */
+export function readPromotionUrl(env: EnvLike = process.env): string | undefined {
+  const t = env.AWIN_PROMOTION_URL;
   if (!t) return undefined;
   return t;
 }

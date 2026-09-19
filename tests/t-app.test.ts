@@ -6,6 +6,11 @@ import { JoinQueue } from '../src/queue';
 import { runJoinWorker } from '../src/worker/stub';
 
 const DAY = Date.UTC(2026, 8, 19, 12, 0, 0);
+const PUBLISHER_ID = 1111111;
+
+function queue(): JoinQueue {
+  return new JoinQueue({ publisherId: PUBLISHER_ID, persist: false });
+}
 
 describe('T-APP', () => {
   it('T-APP-01 Dry-run apply records dry_run_done and invents no join HTTP', async () => {
@@ -13,8 +18,8 @@ describe('T-APP', () => {
     expect(isJoinDryRun({})).toBe(true);
 
     let httpCalls = 0;
-    const queue = new JoinQueue();
-    const result = await applyJoin(queue, 42, {
+    const q = queue();
+    const result = await applyJoin(q, 42, {
       now: DAY,
       dryRun: true,
       env: { AWIN_JOIN_DRY_RUN: 'true' },
@@ -25,33 +30,33 @@ describe('T-APP', () => {
     });
 
     expect(result).toEqual({ ok: true, state: 'dry_run_done', advertiserId: 42 });
-    expect(queue.get(42)?.state).toBe('dry_run_done');
+    expect(q.get(42)?.state).toBe('dry_run_done');
     expect(httpCalls).toBe(0);
   });
 
   it('T-APP-02 21st apply same day is blocked by daily cap', async () => {
-    const queue = new JoinQueue();
+    const q = queue();
     for (let i = 0; i < MAX_APPLIES_PER_DAY; i += 1) {
-      const r = await applyJoin(queue, 1000 + i, { now: DAY + i * MIN_SUBMIT_INTERVAL_MS, dryRun: true });
+      const r = await applyJoin(q, 1000 + i, { now: DAY + i * MIN_SUBMIT_INTERVAL_MS, dryRun: true });
       expect(r.ok).toBe(true);
     }
-    const blocked = await applyJoin(queue, 2000, {
+    const blocked = await applyJoin(q, 2000, {
       now: DAY + MAX_APPLIES_PER_DAY * MIN_SUBMIT_INTERVAL_MS,
       dryRun: true,
     });
     expect(blocked.ok).toBe(false);
     if (!blocked.ok) expect(blocked.reason).toBe('daily_cap');
-    expect(queue.get(2000)?.state).not.toBe('dry_run_done');
+    expect(q.get(2000)?.state).not.toBe('dry_run_done');
   });
 
   it('T-APP-03 Second submit under 30s is blocked by interval', async () => {
-    const queue = new JoinQueue();
-    const first = await applyJoin(queue, 7, { now: DAY, dryRun: true });
+    const q = queue();
+    const first = await applyJoin(q, 7, { now: DAY, dryRun: true });
     expect(first.ok).toBe(true);
-    const second = await applyJoin(queue, 8, { now: DAY + MIN_SUBMIT_INTERVAL_MS - 1, dryRun: true });
+    const second = await applyJoin(q, 8, { now: DAY + MIN_SUBMIT_INTERVAL_MS - 1, dryRun: true });
     expect(second.ok).toBe(false);
     if (!second.ok) expect(second.reason).toBe('interval');
-    const third = await applyJoin(queue, 8, { now: DAY + MIN_SUBMIT_INTERVAL_MS, dryRun: true });
+    const third = await applyJoin(q, 8, { now: DAY + MIN_SUBMIT_INTERVAL_MS, dryRun: true });
     expect(third.ok).toBe(true);
   });
 
@@ -98,14 +103,14 @@ describe('T-APP', () => {
     const stub = await runJoinWorker({ advertiserId: 9 });
     expect(stub).toEqual({ status: 'needs_auth' });
 
-    const queue = new JoinQueue();
-    const result = await applyJoin(queue, 9, { now: DAY, dryRun: false });
+    const q = queue();
+    const result = await applyJoin(q, 9, { now: DAY, dryRun: false });
     expect(result.ok).toBe(false);
     if (!result.ok) {
       expect(result.reason).toBe('needs_auth');
       expect(result.state).toBe('blocked_needs_ui');
       expect(result.worker).toEqual({ status: 'needs_auth' });
     }
-    expect(queue.get(9)?.state).toBe('blocked_needs_ui');
+    expect(q.get(9)?.state).toBe('blocked_needs_ui');
   });
 });

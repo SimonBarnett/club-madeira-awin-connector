@@ -1,0 +1,36 @@
+{
+  "$id": "awin-connector-agent-commands",
+  "title": "Awin publisher connector agent commands",
+  "description": "Publisher id is injected per tenant. There is no default publisher. Named advertisers are example tenants in docs only.",
+  "commands": {
+    "list_join_candidates": {
+      "required": ["publisherId"],
+      "properties": {
+        "publisherId": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Awin publisher id. CLI --publisherId or env AWIN_PUBLISHER_ID."
+        },
+        "fixture": {
+          "type": "string",
+          "description": "Optional JSON array of candidates. Still requires publisherId."
+        }
+      }
+    },
+    "relationship_status": {
+      "required": ["publisherId"],
+      "properties": {
+        "publisherId": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Awin publisher id. CLI --publisherId or env AWIN_PUBLISHER_ID."
+        },
+        "advertiserId": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Optional advertiser id for a single programmedetails lookup."
+        }
+      }
+    }
+  }
+}

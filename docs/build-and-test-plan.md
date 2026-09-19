@@ -2,6 +2,7 @@
 
 **Repo:** `SimonBarnett/club-madeira-awin-connector`  
 **Spec:** [functional-spec.md](./functional-spec.md) + [PDF](./functional-spec-awin-connector-locked-2026-09-18.pdf)  
+**P5 addendum:** [p5-publisher-injection.md](./p5-publisher-injection.md) — publisher id is injected; Club Madeira `2889699` is an example tenant only.  
 **Model preference:** `build0.1` via agentic_build  
 **Audience:** build agent — execute this plan; do not invent a Join write API; do not click Join until gates below.
 
@@ -38,9 +39,10 @@
 | P2 | Criteria + queue | criteria.ts + dry-run apply + list/status; T-SEL T-APP |
 | P3 | Worker stub | returns `needs_auth`; no Join click |
 | P4 | Docs polish | README locked list, Phase 0, AM email, U1–U8 |
-| P5 | Stop for human | Phase 0 spike + U-gates are **Simon/operator**, not build agent Join |
+| P5 | Publisher injection | `PublisherContext` + `--publisherId` / `AWIN_PUBLISHER_ID`; no default id in `src/`; durable per-publisher queue; per-client limiter |
+| P5-stop | Stop for human Join | Phase 0 spike + U-gates are **Simon/operator**, not build agent Join |
 
-Do not start Playwright Join work in P5. Document gates only.
+Do not start Playwright Join work. Document gates only. P5 is identity/durability, not Join.
 
 ---
 

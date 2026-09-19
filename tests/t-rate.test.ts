@@ -46,6 +46,7 @@ describe('T-RATE', () => {
     };
     const client = new AwinClient({
       token: 'rate-token',
+      publisherId: 1111111,
       fetch: fetchImpl,
       limiter,
       env: {},

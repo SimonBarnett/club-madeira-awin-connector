@@ -1,5 +1,6 @@
 import {
   GLOBAL_EXCLUDE_DAYS,
+  INTERACTIVE_BATCH_MAX,
   MESSAGE_MAX,
   MIN_APPROVAL_RATE,
   type Relationship,
@@ -103,10 +104,64 @@ export function evaluateCandidate(input: SelectInput, now: number = Date.now()):
   return { pass: reasons.length === 0, reasons };
 }
 
+function hasLastSeen(row: SelectInput): boolean {
+  return row.lastSeen != null && row.lastSeen !== '';
+}
+
 export function rankJoinCandidates(rows: SelectInput[], now: number = Date.now()): SelectInput[] {
   return rows
     .filter((row) => evaluateCandidate(row, now).pass)
-    .sort((a, b) => toTime(b.lastSeen) - toTime(a.lastSeen));
+    .sort((a, b) => {
+      const aHas = hasLastSeen(a);
+      const bHas = hasLastSeen(b);
+      if (!aHas && !bHas) return 0;
+      if (!aHas) return 1;
+      if (!bHas) return -1;
+      return toTime(b.lastSeen) - toTime(a.lastSeen);
+    });
+}
+
+export type CandidateRecord = {
+  advertiserId: number;
+  approvalRate?: number;
+  relationship?: string;
+  lastSeen?: number | string | Date;
+};
+
+export function toCandidateRecord(row: SelectInput): CandidateRecord {
+  const rec: CandidateRecord = { advertiserId: row.advertiserId };
+  const approval = row.approvalRate ?? row.approvalPercentage;
+  if (approval != null) rec.approvalRate = approval;
+  if (row.relationship != null) rec.relationship = row.relationship;
+  if (hasLastSeen(row)) rec.lastSeen = row.lastSeen;
+  return rec;
+}
+
+export type CandidateListEnvelope = {
+  publisherId: number;
+  considered: number;
+  returned: number;
+  truncated: boolean;
+  candidates: CandidateRecord[];
+};
+
+export function buildCandidateListEnvelope(
+  publisherId: number,
+  rows: SelectInput[],
+  opts: { limit?: number; now?: number; considered?: number } = {},
+): CandidateListEnvelope {
+  const now = opts.now ?? Date.now();
+  const limit = opts.limit ?? INTERACTIVE_BATCH_MAX;
+  const considered = opts.considered ?? rows.length;
+  const ranked = rankJoinCandidates(rows, now);
+  const sliced = ranked.slice(0, limit);
+  return {
+    publisherId,
+    considered,
+    returned: sliced.length,
+    truncated: considered > rows.length || ranked.length > sliced.length,
+    candidates: sliced.map(toCandidateRecord),
+  };
 }
 
 /** Fallback when U5 RDS is unavailable: notjoined + programmedetails.kpi.approvalPercentage. */

@@ -7,7 +7,7 @@ const TOKEN = 'super-secret-awin-token-fixture';
 
 describe('T-RED', () => {
   it('T-RED-01 Error with token in URL is [REDACTED]', () => {
-    const url = `https://api.awin.com/publishers/2889699/programmes?accessToken=${TOKEN}`;
+    const url = `https://api.awin.com/publishers/1111111/programmes?accessToken=${TOKEN}`;
     const err = redactedError(`GET ${url} failed: 401`, [TOKEN]);
     expect(err.message).toContain(REDACTED);
     expect(err.message).toContain('accessToken=[REDACTED]');
@@ -31,6 +31,7 @@ describe('T-RED', () => {
       });
     const client = new AwinClient({
       token: TOKEN,
+      publisherId: 1111111,
       fetch: fetchImpl,
       limiter: new RateLimiter({
         maxCalls: 10,

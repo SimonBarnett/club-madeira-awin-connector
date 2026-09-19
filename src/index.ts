@@ -1,7 +1,5 @@
 export {
-  PUBLISHER_ID,
   API_BASE,
-  PROMOTION_URL,
   MESSAGE_MAX,
   CLIENT_CALLS_PER_MIN,
   MAX_APPLIES_PER_DAY,
@@ -10,15 +8,27 @@ export {
   DEFAULT_DRY_RUN,
   JOIN_WRITE_API,
   isJoinDryRun,
+  readPromotionUrl,
 } from './config';
-export { AwinClient, RateLimiter, redact, redactedError, logRedacted, REDACTED } from './awin';
+export {
+  createPublisherContext,
+  readPublisherId,
+  MissingPublisherIdError,
+  InvalidPublisherIdError,
+  type PublisherContext,
+} from './publisher';
+export { AGENT_COMMAND_SCHEMA } from './schema';
+export { AwinClient, RateLimiter, limiterForToken, redact, redactedError, logRedacted, REDACTED } from './awin';
 export {
   evaluateCandidate,
   rankJoinCandidates,
   selectFromAwin,
   validateMessage,
+  buildCandidateListEnvelope,
+  toCandidateRecord,
   type SelectInput,
+  type CandidateListEnvelope,
 } from './criteria';
-export { JoinQueue, type QueueState } from './queue';
+export { JoinQueue, joinQueuePath, type QueueState } from './queue';
 export { applyJoin, type ApplyResult } from './apply';
 export { runJoinWorker } from './worker/stub';
