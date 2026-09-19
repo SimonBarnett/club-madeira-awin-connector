@@ -1,46 +1,114 @@
-%PDF-1.4
+%PDF-1.3
+%????
 1 0 obj
-<< /Type /Catalog /Pages 2 0 R >>
+<<
+/Count 1
+/Kids [3 0 R]
+/MediaBox [0 0 595.28 841.89]
+/Type /Pages
+>>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+<<
+/OpenAction [3 0 R /FitH null]
+/PageLayout /OneColumn
+/Pages 1 0 R
+/Type /Catalog
+>>
 endobj
 3 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>
+<<
+/Contents 4 0 R
+/Parent 1 0 R
+/Resources 8 0 R
+/Type /Page
+>>
 endobj
 4 0 obj
-<< /Length 412 >>
+<<
+/Length 1103
+>>
 stream
-BT
-/F1 11 Tf
-50 720 Td
-(Hostile MRB 2026-09-19 v1) Tj
-0 -20 Td
-(club-madeira-awin-connector) Tj
-0 -20 Td
-(Verdict: PASS-with-nits \(P0-P4\); FAIL for Join/UAT) Tj
-0 -20 Td
-(Tests: 21 passed; typecheck exit 0; HEAD dc25deb) Tj
-0 -20 Td
-(Full report: docs/mrb-2026-09-19-v1.md) Tj
-0 -20 Td
-(Job after d11ead07; dry-run default; no Join) Tj
-ET
+2 J
+0.57 w
+BT /F1 14.00 Tf ET
+BT 42.52 786.67 Td (Hostile MRB v1 - club-madeira-awin-connector) Tj ET
+BT /F2 10.00 Tf ET
+BT 42.52 763.77 Td (Job: d11ead07 / IONOS machine 293361b2-5bf0-4931-a825-6145d1cace70) Tj ET
+BT 42.52 749.60 Td (Range: a16ea2c..dc25deb \(HEAD dc25deb\)) Tj ET
+BT 42.52 735.43 Td (Slice: First ticket P0-P4) Tj ET
+BT 42.52 709.91 Td (VERDICT: PASS-ready-for-human-UAT) Tj ET
+BT 42.52 684.40 Td (Plan DoD met. Join deferred correctly.) Tj ET
+BT 42.52 670.23 Td (Blockers \(P0-P4\): none.) Tj ET
+BT 42.52 644.72 Td (npm test: 21 passed \(5 files\)) Tj ET
+BT 42.52 630.54 Td (typecheck: exit 0) Tj ET
+BT 42.52 616.37 Td (CI: Actions run 35457042170 success) Tj ET
+BT 42.52 590.86 Td (Nits: in-memory queue; batch caps unused;) Tj ET
+BT 42.52 576.69 Td (PROMOTION_URL unused; RateLimiter single-process.) Tj ET
+BT 42.52 551.17 Td (Human UAT = Phase 0 curls + Join modal Cancel.) Tj ET
+BT 42.52 537.00 Td (Not a Join ship. T-UI-05 gated.) Tj ET
+BT 42.52 511.49 Td (Full write-up: docs/mrb-2026-09-19-v1.md) Tj ET
+BT /F3 8.00 Tf ET
+BT 232.84 20.28 Td (Page 1 | Bob MRB 2026-09-19) Tj ET
+
 endstream
 endobj
 5 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+<<
+/BaseFont /Courier-Bold
+/Encoding /WinAnsiEncoding
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+6 0 obj
+<<
+/BaseFont /Courier
+/Encoding /WinAnsiEncoding
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+7 0 obj
+<<
+/BaseFont /Courier-Oblique
+/Encoding /WinAnsiEncoding
+/Subtype /Type1
+/Type /Font
+>>
+endobj
+8 0 obj
+<<
+/Font <</F1 5 0 R
+/F2 6 0 R
+/F3 7 0 R>>
+/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]
+>>
+endobj
+9 0 obj
+<<
+/CreationDate (D:20260919171209Z)
+>>
 endobj
 xref
-0 6
+0 10
 0000000000 65535 f 
-0000000009 00000 n 
-0000000058 00000 n 
-0000000115 00000 n 
-0000000266 00000 n 
-0000000731 00000 n 
+0000000015 00000 n 
+0000000102 00000 n 
+0000000205 00000 n 
+0000000285 00000 n 
+0000001440 00000 n 
+0000001540 00000 n 
+0000001635 00000 n 
+0000001738 00000 n 
+0000001845 00000 n 
 trailer
-<< /Size 6 /Root 1 0 R >>
+<<
+/Size 10
+/Root 2 0 R
+/Info 9 0 R
+/ID [<E14B47E6B1245C3648FABE6CDA7F1D4F><E14B47E6B1245C3648FABE6CDA7F1D4F>]
+>>
 startxref
-808
+1900
 %%EOF
